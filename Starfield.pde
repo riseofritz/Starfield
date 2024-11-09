@@ -4,7 +4,7 @@ float scaleFactor = 0.01; // Start very small
 
 void setup() {
   size(500, 500);
-  img = loadImage("bruh-removebg-preview (1) (1).png"); // Load your image file here
+  img = loadImage("test-removebg-preview.png"); // Load your image file here
   background(150);
   for (int i = 0; i < bit.length; i++) {
     bit[i] = new particles();
