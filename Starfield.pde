@@ -66,7 +66,7 @@ class particles {
     image(img, myX - size, myY - size, size, size); 
   }
   void moveGmi() {
-    gmiAngle += (float) (Math.random() * 0.1 - 0.05);  // Small random change in angle (controls rotation)
+    gmiAngle += (float) (Math.random() * 0.1 - 0.05);  
     
     if (gmiRadius < minRadius) {
       gmiRadius = minRadius; 
