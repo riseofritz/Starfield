@@ -1,6 +1,6 @@
 PImage img;     
 PImage gmi;    
-Particle[] bit = new Particle[147]; 
+ArrayList<Particle> bit = new ArrayList<Particle>(); 
 boolean isMovingOutwards = true;
 
 float maxRadius = 150; 
@@ -12,28 +12,28 @@ void setup() {
   img = loadImage("test-removebg-preview.png");
   gmi = loadImage("purple-modified.png"); 
   background(150);
-  for (int i = 0; i < bit.length; i++) {
-    bit[i] = new Particle(); 
+  
+  for (int i = 0; i < 10; i++) {
+    bit.add(new Particle(250, 250)); 
   }
-
-  bit[0] = new OddballParticle();
 }
 
 void mousePressed(){
   isMovingOutwards = !isMovingOutwards; 
+  bit.add(new Particle(mouseX, mouseY));
 }
 
 void draw() {
   background(#D8C67A); 
   
-  for (int i = 0; i < bit.length; i++) {
-    bit[i].move(); 
-    bit[i].show();
+  for (int i = 0; i < bit.size(); i++) {
+    bit.get(i).move(); 
+    bit.get(i).show();
   }
 
   for (int i = 0; i < numOrbs; i++) {
-    bit[i].moveGmi();  
-    bit[i].showGmi();  
+    bit.get(i).moveGmi();  
+    bit.get(i).showGmi();  
   }
 }
 
@@ -44,13 +44,13 @@ class Particle {
   float gmiRadius; 
   int orbIndex; 
   
-  Particle() {
-    myX = 250;  
-    myY = 250;
+  Particle(float x, float y) {
+    myX = x;  
+    myY = y;
     mySpeed = (float) (Math.random() * 5 + 2);  
     myAngle = (float) (Math.random() * 2) * PI; 
-    gmiX = 250; 
-    gmiY = 250;
+    gmiX = x; 
+    gmiY = y;
     gmiSpeed = (float) (Math.random() * 3 + 2);  
     gmiAngle = (float) (Math.random() * 2) * PI; 
     gmiRadius = random(minRadius, maxRadius);  
@@ -63,15 +63,11 @@ class Particle {
     if (isMovingOutwards) {
       myX += mySpeed * Math.cos(myAngle);
       myY += mySpeed * Math.sin(myAngle);
-    } else {
-      float angleToCenter = (float) Math.atan2(250 - myY, 250 - myX); 
-      myX += mySpeed * Math.cos(angleToCenter);  
-      myY += mySpeed * Math.sin(angleToCenter);
     }
   }
   
   void show() {
-    tint(myColor); // Apply color tint
+    tint(myColor); 
     float size = 25;  
     image(img, myX - size, myY - size, size, size); 
     noTint(); 
@@ -81,11 +77,8 @@ class Particle {
     if (isMovingOutwards) {
       gmiRadius += gmiSpeed * 0.05;  
     } else {
-      float angleToCenter = atan2(250 - gmiY, 250 - gmiX);
-      gmiX += gmiSpeed * cos(angleToCenter);  
-      gmiY += gmiSpeed * sin(angleToCenter);
-      gmiX = constrain(gmiX, 25, width - 25); 
-      gmiY = constrain(gmiY, 25, height - 25);  
+      gmiX += gmiSpeed * cos(gmiAngle);
+      gmiY += gmiSpeed * sin(gmiAngle);
     }
    
     if (gmiRadius >= minRadius) {
@@ -94,8 +87,6 @@ class Particle {
       gmiRadius = constrain(gmiRadius, minRadius, maxRadius);
       gmiX += gmiSpeed * cos(gmiAngle);
       gmiY += gmiSpeed * sin(gmiAngle);
-      gmiX = constrain(gmiX, 25, width - 25);
-      gmiY = constrain(gmiY, 25, height - 25);
     } else {
       gmiX = 250 + gmiRadius * cos(gmiAngle);  
       gmiY = 250 + gmiRadius * sin(gmiAngle); 
@@ -110,19 +101,19 @@ class Particle {
 
 class OddballParticle extends Particle {
   
-  OddballParticle() {
-    super(); 
+  OddballParticle(float x, float y) {
+    super(x, y); 
   }
   
- // @Override
+  @Override
   void move() {
     myX += mySpeed * Math.cos(myAngle) * 1.5;  
     myY += mySpeed * Math.sin(myAngle) * 1.5;
   }
   
- // @Override
+  @Override
   void show() {
-    tint(255, 0, 0);
+    tint(255, 0, 0); 
     super.show(); 
     noTint();
   }
