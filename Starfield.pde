@@ -122,14 +122,14 @@ class OddballParticle extends Particle {
     super(x, y); // Call the parent constructor
   }
   
-  @Override
+ // @Override
   void move() {
     // Custom move behavior for OddballParticle
     myX += mySpeed * Math.cos(myAngle) * 1.5;  // Oddball moves faster
     myY += mySpeed * Math.sin(myAngle) * 1.5;
   }
   
-  @Override
+//  @Override
   void show() {
     tint(255, 0, 0); // OddballParticle has a unique color
     super.show(); // Use the parent class show method
