@@ -1,6 +1,6 @@
 PImage img;     
 PImage gmi;    
-particles[] bit = new particles[147];
+Particle[] bit = new Particle[147]; 
 boolean isMovingOutwards = true;
 
 float maxRadius = 150; 
@@ -13,8 +13,10 @@ void setup() {
   gmi = loadImage("purple-modified.png"); 
   background(150);
   for (int i = 0; i < bit.length; i++) {
-    bit[i] = new particles(); 
+    bit[i] = new Particle(); 
   }
+
+  bit[0] = new OddballParticle();
 }
 
 void mousePressed(){
@@ -35,14 +37,14 @@ void draw() {
   }
 }
 
-class particles {
+class Particle {
   int myColor;
   float myX, myY, mySpeed, myAngle; 
   float gmiX, gmiY, gmiSpeed, gmiAngle;  
   float gmiRadius; 
   int orbIndex; 
   
-  particles() {
+  Particle() {
     myX = 250;  
     myY = 250;
     mySpeed = (float) (Math.random() * 5 + 2);  
@@ -69,41 +71,32 @@ class particles {
   }
   
   void show() {
+    tint(myColor); // Apply color tint
     float size = 25;  
     image(img, myX - size, myY - size, size, size); 
+    noTint(); 
   }
 
   void moveGmi() {
     if (isMovingOutwards) {
       gmiRadius += gmiSpeed * 0.05;  
     } else {
-      
       float angleToCenter = atan2(250 - gmiY, 250 - gmiX);
       gmiX += gmiSpeed * cos(angleToCenter);  
       gmiY += gmiSpeed * sin(angleToCenter);
-
-      
       gmiX = constrain(gmiX, 25, width - 25); 
       gmiY = constrain(gmiY, 25, height - 25);  
     }
-
    
     if (gmiRadius >= minRadius) {
       gmiAngle += (float) (Math.random() * 0.1 - 0.05); 
-      
-      
       gmiRadius += (float) (Math.random() * 5 - 2);
       gmiRadius = constrain(gmiRadius, minRadius, maxRadius);
-
-   
       gmiX += gmiSpeed * cos(gmiAngle);
       gmiY += gmiSpeed * sin(gmiAngle);
-
-     
       gmiX = constrain(gmiX, 25, width - 25);
       gmiY = constrain(gmiY, 25, height - 25);
     } else {
-     
       gmiX = 250 + gmiRadius * cos(gmiAngle);  
       gmiY = 250 + gmiRadius * sin(gmiAngle); 
     }
@@ -112,5 +105,25 @@ class particles {
   void showGmi() {
     float size = 25;  
     image(gmi, gmiX - size, gmiY - size, size, size); 
+  }
+}
+
+class OddballParticle extends Particle {
+  
+  OddballParticle() {
+    super(); 
+  }
+  
+ // @Override
+  void move() {
+    myX += mySpeed * Math.cos(myAngle) * 1.5;  
+    myY += mySpeed * Math.sin(myAngle) * 1.5;
+  }
+  
+ // @Override
+  void show() {
+    tint(255, 0, 0);
+    super.show(); 
+    noTint();
   }
 }
