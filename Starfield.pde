@@ -59,51 +59,40 @@ class particles {
   
   void move() {
     if (isMovingOutwards) {
-      myX += mySpeed * Math.cos(myAngle);
-      myY += mySpeed * Math.sin(myAngle);
-    } else {
-      float angleToCenter = (float) Math.atan2(250 - myY, 250 - myX); 
-      myX += mySpeed * Math.cos(angleToCenter);  
-      myY += mySpeed * Math.sin(angleToCenter);
+      myX += mySpeed * Math.cos(myAngle);  // Move outwards in a random direction
+      myY += mySpeed * Math.sin(myAngle);  // Move outwards in a random direction
     }
   }
   
   void show() {
     float size = 25;  
-    image(img, myX - size, myY - size, size, size); 
+    image(img, myX - size, myY - size, size, size);  // Draw the orb image
   }
 
   void moveGmi() {
     if (isMovingOutwards) {
       gmiRadius += gmiSpeed * 0.05;  
     } else {
-      
       float angleToCenter = atan2(250 - gmiY, 250 - gmiX);
       gmiX += gmiSpeed * cos(angleToCenter);  
       gmiY += gmiSpeed * sin(angleToCenter);
 
-      
       gmiX = constrain(gmiX, 25, width - 25); 
       gmiY = constrain(gmiY, 25, height - 25);  
     }
 
-   
     if (gmiRadius >= minRadius) {
       gmiAngle += (float) (Math.random() * 0.1 - 0.05); 
-      
       
       gmiRadius += (float) (Math.random() * 5 - 2);
       gmiRadius = constrain(gmiRadius, minRadius, maxRadius);
 
-   
       gmiX += gmiSpeed * cos(gmiAngle);
       gmiY += gmiSpeed * sin(gmiAngle);
 
-     
       gmiX = constrain(gmiX, 25, width - 25);
       gmiY = constrain(gmiY, 25, height - 25);
     } else {
-     
       gmiX = 250 + gmiRadius * cos(gmiAngle);  
       gmiY = 250 + gmiRadius * sin(gmiAngle); 
     }
