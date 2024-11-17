@@ -1,6 +1,6 @@
 PImage img;     
 PImage gmi;    
-Particle[] bit = new Particle[147]; // Changed class name to 'Particle'
+Particle[] bit = new Particle[147]; 
 boolean isMovingOutwards = true;
 
 float maxRadius = 150; 
@@ -12,31 +12,29 @@ void setup() {
   img = loadImage("test-removebg-preview.png");
   gmi = loadImage("purple-modified.png"); 
   background(150);
+  
+  // Initialize particles at the center
   for (int i = 0; i < bit.length; i++) {
-    bit[i] = null; // Ensure all particles are initialized to null
+    bit[i] = new Particle(250, 250); // Start all particles at the center
   }
 }
 
 void mousePressed() {
   isMovingOutwards = !isMovingOutwards; 
   
-  // Spawn a new Particle at the mouse position
+  // Set all particles' positions to the mouse click location
   for (int i = 0; i < bit.length; i++) {
-    if (bit[i] == null) {
-      bit[i] = new Particle(mouseX, mouseY);
-      break; // Add only one particle per click
-    }
+    bit[i].setPosition(mouseX, mouseY); // Update position to mouse click
   }
 }
 
 void draw() {
   background(#D8C67A); 
   
+  // Move and show all particles
   for (int i = 0; i < bit.length; i++) {
-    if (bit[i] != null) {
-      bit[i].move(); 
-      bit[i].show();
-    }
+    bit[i].move(); 
+    bit[i].show();
   }
 
   for (int i = 0; i < numOrbs; i++) {
@@ -54,7 +52,7 @@ class Particle {
   float gmiRadius; 
   int orbIndex; 
   
-  // Particle constructor that takes the mouse position as the starting point
+  // Particle constructor that takes initial position
   Particle(float x, float y) {
     myX = x;  
     myY = y;
@@ -68,6 +66,13 @@ class Particle {
     myColor = color((int) (Math.random() * 250), (int) (Math.random() * 250), (int) (Math.random() * 250));
     
     orbIndex = int(random(numOrbs)); 
+  }
+
+  // Method to set the position of a particle (called when mouse is pressed)
+  void setPosition(float x, float y) {
+    myX = x;
+    myY = y;
+    myAngle = (float) (Math.random() * TWO_PI);  // Reset random angle for outward motion
   }
   
   void move() {
@@ -129,7 +134,7 @@ class OddballParticle extends Particle {
     myY += mySpeed * Math.sin(myAngle) * 1.5;
   }
   
-//  @Override
+  //@Override
   void show() {
     tint(255, 0, 0); // OddballParticle has a unique color
     super.show(); // Use the parent class show method
