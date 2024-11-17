@@ -90,10 +90,10 @@ class OddballParticle {
     myY += mySpeed * Math.sin(myAngle); 
     
     
-   // if (frameCount % 10 == 0) {  
-     // myAngle += (float) (Math.random() * 0.1 - 0.05);
-    //}
- // }
+    if (frameCount % 10 == 0) {  
+      myAngle += (float) (Math.random() * 0.1 - 0.05);
+    }
+  }
   
   void show() {
     float size = 75;  
