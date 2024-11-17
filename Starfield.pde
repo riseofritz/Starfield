@@ -1,6 +1,6 @@
 PImage img;     
 PImage gmi;    
-ArrayList<Particle> bit = new ArrayList<Particle>(); 
+particles[] bit = new particles[147]; 
 boolean isMovingOutwards = true;
 
 float maxRadius = 150; 
@@ -14,37 +14,46 @@ void setup() {
   background(150);
   
   for (int i = 0; i < 10; i++) {
-    bit.add(new Particle(250, 250)); 
+    bit[i] = new particles(250, 250); 
   }
 }
 
 void mousePressed(){
   isMovingOutwards = !isMovingOutwards; 
-  bit.add(new Particle(mouseX, mouseY));
+  for (int i = 0; i < bit.length; i++) {
+    if (bit[i] == null) {
+      bit[i] = new particles(mouseX, mouseY);
+      break;
+    }
+  }
 }
 
 void draw() {
   background(#D8C67A); 
   
-  for (int i = 0; i < bit.size(); i++) {
-    bit.get(i).move(); 
-    bit.get(i).show();
+  for (int i = 0; i < bit.length; i++) {
+    if (bit[i] != null) {
+      bit[i].move(); 
+      bit[i].show();
+    }
   }
 
   for (int i = 0; i < numOrbs; i++) {
-    bit.get(i).moveGmi();  
-    bit.get(i).showGmi();  
+    if (bit[i] != null) {
+      bit[i].moveGmi();  
+      bit[i].showGmi();  
+    }
   }
 }
 
-class Particle {
+class particles {
   int myColor;
   float myX, myY, mySpeed, myAngle; 
   float gmiX, gmiY, gmiSpeed, gmiAngle;  
   float gmiRadius; 
   int orbIndex; 
   
-  Particle(float x, float y) {
+  particles(float x, float y) {
     myX = x;  
     myY = y;
     mySpeed = (float) (Math.random() * 5 + 2);  
@@ -99,7 +108,7 @@ class Particle {
   }
 }
 
-class OddballParticle extends Particle {
+class OddballParticle extends particles {
   
   OddballParticle(float x, float y) {
     super(x, y); 
