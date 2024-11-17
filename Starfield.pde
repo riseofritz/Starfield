@@ -1,11 +1,12 @@
 PImage img;     
 PImage gmi;    
-Particle[] bit = new Particle[147]; 
+Particle[] bit = new Particle[147]; // Regular orbs
 boolean isMovingOutwards = true;
 
 float maxRadius = 150; 
 float minRadius = 75;   
 int numOrbs = 5;
+OddballParticle oddball; // Singular Oddball particle
 
 void setup() {
   size(500, 500);
@@ -13,30 +14,38 @@ void setup() {
   gmi = loadImage("purple-modified.png"); 
   background(150);
   
-  // Initialize particles at the center
+  // Initialize regular particles (orbs) at the center
   for (int i = 0; i < bit.length; i++) {
     bit[i] = new Particle(250, 250); // Start all particles at the center
   }
+
+  // Initialize a singular Oddball particle at the center
+  oddball = new OddballParticle(250, 250);
 }
 
 void mousePressed() {
   isMovingOutwards = !isMovingOutwards; 
   
-  // Set all particles' positions to the mouse click location
+  // Set all regular particles and the oddball to start at the center
   for (int i = 0; i < bit.length; i++) {
-    bit[i].setPosition(mouseX, mouseY); // Update position to mouse click
+    bit[i].setPosition(250, 250); // Update position to center
   }
+  oddball.setPosition(250, 250); // Set oddball position to center
 }
 
 void draw() {
   background(#D8C67A); 
   
-  // Move and show all particles
+  // Move and show all regular particles (orbs)
   for (int i = 0; i < bit.length; i++) {
     bit[i].move(); 
     bit[i].show();
   }
 
+  // Move and show the oddball particle
+  oddball.move();
+  oddball.show();
+  
   for (int i = 0; i < numOrbs; i++) {
     if (bit[i] != null) {
       bit[i].moveGmi();  
@@ -125,19 +134,20 @@ class OddballParticle extends Particle {
   
   OddballParticle(float x, float y) {
     super(x, y); // Call the parent constructor
+    mySpeed *= 1.5; // Oddball moves faster
   }
   
  // @Override
   void move() {
-    // Custom move behavior for OddballParticle
-    myX += mySpeed * Math.cos(myAngle) * 1.5;  // Oddball moves faster
-    myY += mySpeed * Math.sin(myAngle) * 1.5;
+    myX += mySpeed * Math.cos(myAngle);  // Oddball moves outwards faster
+    myY += mySpeed * Math.sin(myAngle);
   }
   
-  //@Override
+//  @Override
   void show() {
-    tint(255, 0, 0); // OddballParticle has a unique color
-    super.show(); // Use the parent class show method
+    tint(255, 0, 0); // Oddball has a unique red color
+    float size = 125;  // 5 times the size of a regular orb
+    image(img, myX - size / 2, myY - size / 2, size, size); 
     noTint();
   }
 }
