@@ -1,7 +1,6 @@
 PImage img;     
 PImage gmi;    
 particles[] bit = new particles[147];
-boolean isMovingOutwards = true;
 
 float maxRadius = 150; 
 float minRadius = 75;   
@@ -18,7 +17,9 @@ void setup() {
 }
 
 void mousePressed(){
-  isMovingOutwards = !isMovingOutwards; 
+  for (int i = 0; i < bit.length; i++) {
+    bit[i].reset();  // Reset each orb to the center when the user clicks
+  }
 }
 
 void draw() {
@@ -43,25 +44,20 @@ class particles {
   int orbIndex; 
   
   particles() {
-    myX = 250;  
-    myY = 250;
-    mySpeed = (float) (Math.random() * 5 + 2);  
-    myAngle = (float) (Math.random() * 2) * PI; 
-    gmiX = 250; 
-    gmiY = 250;
-    gmiSpeed = (float) (Math.random() * 3 + 2);  
-    gmiAngle = (float) (Math.random() * 2) * PI; 
-    gmiRadius = random(minRadius, maxRadius);  
-    myColor = color((int) (Math.random() * 250), (int) (Math.random() * 250), (int) (Math.random() * 250));
-    
-    orbIndex = int(random(numOrbs)); 
+    reset(); // Initialize the particles with a reset call to set them at the center
+  }
+  
+  void reset() {
+    myX = 250;  // Reset X position to center
+    myY = 250;  // Reset Y position to center
+    mySpeed = (float) (Math.random() * 5 + 2);  // Random speed
+    myAngle = (float) (Math.random() * 2) * PI;  // Random angle
+    myColor = color((int) (Math.random() * 250), (int) (Math.random() * 250), (int) (Math.random() * 250));  // Random color
   }
   
   void move() {
-    if (isMovingOutwards) {
-      myX += mySpeed * Math.cos(myAngle);  // Move outwards in a random direction
-      myY += mySpeed * Math.sin(myAngle);  // Move outwards in a random direction
-    }
+    myX += mySpeed * Math.cos(myAngle);  // Move outwards in a random direction
+    myY += mySpeed * Math.sin(myAngle);  // Move outwards in a random direction
   }
   
   void show() {
@@ -70,20 +66,9 @@ class particles {
   }
 
   void moveGmi() {
-    if (isMovingOutwards) {
-      gmiRadius += gmiSpeed * 0.05;  
-    } else {
-      float angleToCenter = atan2(250 - gmiY, 250 - gmiX);
-      gmiX += gmiSpeed * cos(angleToCenter);  
-      gmiY += gmiSpeed * sin(angleToCenter);
-
-      gmiX = constrain(gmiX, 25, width - 25); 
-      gmiY = constrain(gmiY, 25, height - 25);  
-    }
-
+    gmiRadius += gmiSpeed * 0.05;  
     if (gmiRadius >= minRadius) {
       gmiAngle += (float) (Math.random() * 0.1 - 0.05); 
-      
       gmiRadius += (float) (Math.random() * 5 - 2);
       gmiRadius = constrain(gmiRadius, minRadius, maxRadius);
 
